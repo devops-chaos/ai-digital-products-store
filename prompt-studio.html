@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Generate reusable AI prompts for sales, resumes, content, operations, courses, and support." />
+    <title>Prompt Studio | PromptlyPro</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="prompt-studio">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><strong class="brand-mark">P</strong><span><strong>PromptlyPro</strong><span>AI digital products</span></span></a>
+        <nav class="main-nav" aria-label="Primary navigation">
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="store.html" data-nav="store">Store</a>
+          <a href="ai-finder.html" data-nav="ai-finder">AI Finder</a>
+          <a href="prompt-studio.html" data-nav="prompt-studio">Prompt Studio</a>
+          <a href="resume-picker.html" data-nav="resume-picker">Resume Picker</a>
+          <a href="downloads.html" data-nav="downloads">Downloads</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button ghost" href="admin.html">Admin</a>
+          <a class="cart-link" href="cart.html">Cart <span data-cart-count>0</span></a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Prompt Studio</p>
+            <h1>Create Reusable Prompts for Real Work</h1>
+            <p>Generate structured prompts that customers can adapt for selling, writing, hiring, studying, and operations.</p>
+          </div>
+          <div class="page-kpis">
+            <div><strong>6 modes</strong><span>sales, resume, content, ops, course, support</span></div>
+            <div><strong>API ready</strong><span>OpenAI endpoint prepared</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="tool-layout">
+          <form class="tool-panel" data-prompt-form>
+            <label>
+              <span>Task</span>
+              <select id="promptTask">
+                <option value="sales">Sales outreach</option>
+                <option value="resume">Resume rewrite</option>
+                <option value="content">Content calendar</option>
+                <option value="operations">Business automation</option>
+                <option value="course">Mini course outline</option>
+                <option value="support">Customer support macros</option>
+              </select>
+            </label>
+            <label><span>Audience</span><input id="promptAudience" type="text" value="busy small business owners" /></label>
+            <label>
+              <span>Tone</span>
+              <select id="promptTone">
+                <option value="clear, confident, and helpful">Clear and confident</option>
+                <option value="friendly, practical, and concise">Friendly and practical</option>
+                <option value="premium, sharp, and conversion-focused">Premium and sharp</option>
+                <option value="warm, detailed, and beginner-friendly">Warm and detailed</option>
+              </select>
+            </label>
+            <label>
+              <span>Output</span>
+              <select id="promptFormat">
+                <option value="a polished ready-to-use draft">Ready-to-use draft</option>
+                <option value="a checklist with clear next actions">Checklist</option>
+                <option value="a table with sections, examples, and notes">Table</option>
+                <option value="three strong variations">Three variations</option>
+              </select>
+            </label>
+            <button class="button primary full" type="submit">Generate Prompt</button>
+          </form>
+          <div class="result-panel">
+            <textarea class="prompt-output" id="promptOutputText" rows="18" readonly></textarea>
+            <div class="form-actions">
+              <button class="button secondary" type="button" data-copy-prompt>Copy Prompt</button>
+              <button class="button ghost" type="button" data-download-prompt>Download</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner container">
+        <div><a class="brand" href="index.html"><strong class="brand-mark">P</strong><span><strong>PromptlyPro</strong><span>AI digital products</span></span></a><p>Reusable AI prompts that feel practical, not generic.</p></div>
+        <div><h3>Store</h3><a href="store.html">Catalog</a><a href="ai-finder.html">AI Finder</a><a href="cart.html">Checkout</a></div>
+        <div><h3>Tools</h3><a href="prompt-studio.html">Prompt Studio</a><a href="resume-picker.html">Resume Picker</a><a href="downloads.html">Downloads</a></div>
+        <div><h3>Company</h3><a href="support.html">Support</a><a href="policies.html">Policies</a><a href="admin.html">Admin</a></div>
+      </div>
+    </footer>
+
+    <script src="assets/catalog.js"></script>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

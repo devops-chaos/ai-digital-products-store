@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Browse PromptlyPro AI digital products by category, audience, budget, and rating." />
+    <title>Store | PromptlyPro</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="store">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><strong class="brand-mark">P</strong><span><strong>PromptlyPro</strong><span>AI digital products</span></span></a>
+        <nav class="main-nav" aria-label="Primary navigation">
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="store.html" data-nav="store">Store</a>
+          <a href="ai-finder.html" data-nav="ai-finder">AI Finder</a>
+          <a href="prompt-studio.html" data-nav="prompt-studio">Prompt Studio</a>
+          <a href="resume-picker.html" data-nav="resume-picker">Resume Picker</a>
+          <a href="downloads.html" data-nav="downloads">Downloads</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button ghost" href="admin.html">Admin</a>
+          <a class="cart-link" href="cart.html">Cart <span data-cart-count>0</span></a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Catalog</p>
+            <h1>Browse the Digital Product Store</h1>
+            <p>Filter practical AI-ready products by buyer type, category, budget, and quality signal.</p>
+          </div>
+          <div class="page-kpis">
+            <div><strong data-result-count>12 products</strong><span>matching current filters</span></div>
+            <div><strong>Demo checkout</strong><span>ready before Stripe keys</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="store-layout">
+          <aside class="filter-panel" aria-label="Product filters">
+            <label><span>Search</span><input id="searchInput" type="search" placeholder="Resume, prompts, business..." /></label>
+            <label><span>Category</span><select id="categoryFilter"></select></label>
+            <label>
+              <span>Audience</span>
+              <select id="audienceFilter">
+                <option value="all">Everyone</option>
+                <option value="job-seekers">Job seekers</option>
+                <option value="freelancers">Freelancers</option>
+                <option value="founders">Founders</option>
+                <option value="creators">Creators</option>
+                <option value="students">Students</option>
+                <option value="teams">Teams</option>
+              </select>
+            </label>
+            <label>
+              <span>Budget</span>
+              <select id="budgetFilter">
+                <option value="999">Any price</option>
+                <option value="25">Under $25</option>
+                <option value="50">Under $50</option>
+                <option value="80">Under $80</option>
+              </select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select id="sortFilter">
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="rating">Top rated</option>
+              </select>
+            </label>
+          </aside>
+          <div class="store-tools">
+            <div class="catalog-toolbar">
+              <div class="chips" data-category-tabs></div>
+              <a class="button secondary" href="ai-finder.html">Use AI Finder</a>
+            </div>
+            <div class="product-grid three" data-product-grid></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner container">
+        <div><a class="brand" href="index.html"><strong class="brand-mark">P</strong><span><strong>PromptlyPro</strong><span>AI digital products</span></span></a><p>Professional digital products with AI-ready selling flows.</p></div>
+        <div><h3>Store</h3><a href="store.html">Catalog</a><a href="ai-finder.html">AI Finder</a><a href="cart.html">Checkout</a></div>
+        <div><h3>Tools</h3><a href="prompt-studio.html">Prompt Studio</a><a href="resume-picker.html">Resume Picker</a><a href="downloads.html">Downloads</a></div>
+        <div><h3>Company</h3><a href="support.html">Support</a><a href="policies.html">Policies</a><a href="admin.html">Admin</a></div>
+      </div>
+    </footer>
+
+    <script src="assets/catalog.js"></script>
+    <script src="assets/site.js"></script>
+  </body>
+</html>
