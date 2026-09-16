@@ -8,6 +8,8 @@ node_modules/
 AppData/
 dist/
 build/
+artifacts/
+.tmp-*-profile/
 .DS_Store
 Thumbs.db
 *.log

@@ -141,6 +141,7 @@ function showToast(message) {
 }
 
 function productCard(product, options = {}) {
+  const aiScore = Math.min(99, Math.round(product.featured * 0.7 + product.rating * 6));
   const action = options.compact
     ? ""
     : `<button class="button primary" type="button" data-add-product="${escapeHtml(product.id)}">Add to Cart</button>`;
@@ -154,10 +155,14 @@ function productCard(product, options = {}) {
       <div class="product-content">
         <div class="meta-row">
           <span class="category-pill">${escapeHtml(product.category)}</span>
-          <span class="rating">${product.rating.toFixed(1)}</span>
+          <span class="rating">${product.rating.toFixed(1)}/5</span>
         </div>
         <h3><a href="${productUrl(product)}">${escapeHtml(product.name)}</a></h3>
         <p>${escapeHtml(product.summary)}</p>
+        <div class="product-signal">
+          <span>AI fit signal</span>
+          <strong>${aiScore}%</strong>
+        </div>
         <ul class="feature-list">
           ${product.features.slice(0, 3).map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
         </ul>
@@ -300,11 +305,20 @@ function renderProductDetail() {
     <section class="product-detail-layout">
       <div class="product-detail-media">
         <img src="${imagePath(product)}" alt="${escapeHtml(product.name)} product preview" />
+        <div class="detail-media-strip">
+          <div><strong>${product.rating.toFixed(1)}/5</strong><span>buyer signal</span></div>
+          <div><strong>${product.features.length}</strong><span>included assets</span></div>
+          <div><strong>Instant</strong><span>delivery</span></div>
+        </div>
       </div>
       <div class="product-detail-copy">
         <span class="category-pill">${escapeHtml(product.category)}</span>
         <h1>${escapeHtml(product.name)}</h1>
         <p>${escapeHtml(product.details)}</p>
+        <div class="product-fit-panel">
+          <span>AI buying note</span>
+          <p>This product is strongest for ${product.audience.map((item) => escapeHtml(item.replace("-", " "))).join(", ")} who need ${product.outcomes.map((item) => escapeHtml(item.toLowerCase())).join(", ")}.</p>
+        </div>
         <div class="price-row">
           <strong>${money(product.price)}</strong>
           <span>${product.rating.toFixed(1)} rating</span>
@@ -326,7 +340,7 @@ function renderProductDetail() {
         <h2>Everything Included</h2>
       </div>
       <div class="feature-grid">
-        ${product.features.map((feature) => `<div class="feature-card"><strong>${escapeHtml(feature)}</strong><p>Editable, reusable, and built for practical delivery.</p></div>`).join("")}
+        ${product.features.map((feature, index) => `<div class="feature-card numbered"><span>${String(index + 1).padStart(2, "0")}</span><strong>${escapeHtml(feature)}</strong><p>Editable, reusable, and built for practical delivery.</p></div>`).join("")}
       </div>
     </section>
     <section class="section">
@@ -361,7 +375,7 @@ function renderCartPage() {
     target.innerHTML = `
       <div class="empty-panel">
         <h2>Your cart is empty</h2>
-        <p>Add a few digital products and return here to complete the demo checkout.</p>
+        <p>Add a few digital products and return here to complete checkout.</p>
         <a class="button primary" href="${rootPath()}store.html">Browse Store</a>
       </div>
     `;
@@ -372,9 +386,11 @@ function renderCartPage() {
     <div class="cart-layout">
       <section class="cart-list">
         ${state.cart
-          .map(
-            (item) => `
+          .map((item) => {
+            const product = productById(item.id);
+            return `
               <article class="cart-item">
+                <img src="${imagePath(product || item)}" alt="${escapeHtml(item.name)} preview" />
                 <div>
                   <span class="category-pill">${escapeHtml(item.category)}</span>
                   <h3>${escapeHtml(item.name)}</h3>
@@ -387,8 +403,8 @@ function renderCartPage() {
                 <strong>${money(item.price * item.quantity)}</strong>
                 <button class="button ghost" type="button" data-remove-product="${escapeHtml(item.id)}">Remove</button>
               </article>
-            `
-          )
+            `;
+          })
           .join("")}
       </section>
       <aside class="checkout-summary">
@@ -396,6 +412,7 @@ function renderCartPage() {
         <div><span>Subtotal</span><strong>${money(cartTotal())}</strong></div>
         <div><span>Delivery</span><strong>Instant</strong></div>
         <div><span>Tax</span><strong>Calculated by Stripe</strong></div>
+        <div><span>Access</span><strong>Download vault</strong></div>
         <button class="button primary full" type="button" data-checkout>Complete Checkout</button>
         <p>Your products unlock instantly after checkout. Payment processing can connect to Stripe when production keys are added.</p>
       </aside>
@@ -423,7 +440,7 @@ async function checkout() {
       }
     }
   } catch {
-    // Static demo mode continues below.
+    // Static local fallback continues below.
   }
 
   const existing = new Map(state.purchases.map((purchase) => [purchase.id, purchase]));
@@ -456,6 +473,12 @@ function renderDownloadsPage() {
         <p>Complete checkout and your product files will appear here.</p>
         <a class="button primary" href="${rootPath()}store.html">Shop Products</a>
       </div>
+      <div class="section-heading vault-suggestions">
+        <div>
+          <span class="eyebrow">Suggested next</span>
+          <h2>Start with a Curated Product</h2>
+        </div>
+      </div>
       <div class="product-grid four">${suggestions.map((product) => productCard(product, { compact: true })).join("")}</div>
     `;
     return;
@@ -473,6 +496,7 @@ function renderDownloadsPage() {
                 <h3>${escapeHtml(product.name)}</h3>
                 <p>${escapeHtml(product.format)}</p>
               </div>
+              <div class="download-meta"><span>License</span><strong>Internal use</strong></div>
               <button class="button primary" type="button" data-download-product="${escapeHtml(product.id)}">Download Files</button>
             </article>
           `
@@ -494,7 +518,7 @@ Included:
 ${product.features.map((feature) => `- ${feature}`).join("\n")}
 
 Implementation notes:
-- Replace placeholders with your business, role, or brand details.
+- Replace fill-in lines with your business, role, or brand details.
 - Keep a working copy before editing.
 - Connect Stripe webhook fulfillment before selling real customer downloads.
 `;
@@ -524,14 +548,24 @@ function renderFinderPage() {
     const role = document.querySelector("#finderRole").value;
     const goal = document.querySelector("#finderGoal").value.trim();
     const budget = Number(document.querySelector("#finderBudget").value);
+    const priority = document.querySelector("#finderPriority")?.value || "speed";
     const result = document.querySelector("[data-finder-results]");
     const words = new Set(goal.toLowerCase().split(/\W+/).filter(Boolean));
+    const priorityTags = {
+      speed: ["automation", "workflow", "templates", "planner", "prompts"],
+      revenue: ["sales", "clients", "proposal", "launch", "outreach"],
+      quality: ["support", "sop", "brand", "workflow", "operations"],
+      career: ["resume", "linkedin", "career", "interview", "profile"],
+    };
 
     const matches = allProducts()
       .map((product) => {
         let score = product.featured / 2;
         if (product.audience.includes(role)) score += 34;
         if (product.price <= budget) score += 16;
+        (priorityTags[priority] || []).forEach((tag) => {
+          if (product.tags.includes(tag) || product.summary.toLowerCase().includes(tag)) score += 8;
+        });
         product.tags.forEach((tag) => {
           if (words.has(tag) || goal.toLowerCase().includes(tag)) score += 12;
         });
@@ -549,7 +583,12 @@ function renderFinderPage() {
               <h3>${escapeHtml(product.name)}</h3>
               <p>${escapeHtml(product.summary)}</p>
             </div>
+            <div class="recommendation-meta">
+              <div><span>Fit score</span><strong>${score}%</strong></div>
+              <div><span>Best for</span><strong>${escapeHtml(product.audience[0].replace("-", " "))}</strong></div>
+            </div>
             <div class="score-bar"><span style="width:${score}%"></span></div>
+            <p class="recommendation-note">Recommended because it aligns with your buyer role, budget, and ${escapeHtml(priority.replace("-", " "))} priority.</p>
             <div class="recommendation-actions">
               <a class="button secondary" href="${productUrl(product)}">View Details</a>
               <button class="button primary" type="button" data-add-product="${escapeHtml(product.id)}">Add to Cart</button>
@@ -570,6 +609,7 @@ function renderPromptStudio() {
   function buildPrompt() {
     const task = document.querySelector("#promptTask").value;
     const audience = document.querySelector("#promptAudience").value.trim() || "my target audience";
+    const context = document.querySelector("#promptContext")?.value.trim() || "my current project";
     const tone = document.querySelector("#promptTone").value;
     const format = document.querySelector("#promptFormat").value;
     const taskMap = {
@@ -585,20 +625,22 @@ function renderPromptStudio() {
 
 Goal: ${taskMap[task]}.
 Audience: ${audience}.
+Context: ${context}.
 Tone: ${tone}.
 Output format: ${format}.
 
 Context:
 - My offer, product, or role is: [fill this in]
-- My constraints are: [fill this in]
-- My preferred tools are: [fill this in]
+- My constraints, budget, or deadline are: [fill this in]
+- My preferred tools, platforms, or file format are: [fill this in]
 
 Instructions:
 1. Ask up to three clarifying questions only if missing context would change the result.
 2. Create practical sections with clear labels.
 3. Include examples I can reuse immediately.
 4. Add a short quality checklist.
-5. Keep the language natural, direct, and ready to publish.`;
+5. Add one risk or assumption to review before publishing.
+6. Keep the language natural, direct, and ready to publish.`;
   }
 
   output.value = buildPrompt();
@@ -629,6 +671,7 @@ function renderResumePicker() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const role = document.querySelector("#resumeRole").value.trim() || "your target role";
+    const industry = document.querySelector("#resumeIndustry")?.value || "technology";
     const level = document.querySelector("#resumeLevel").value;
     const style = document.querySelector("#resumeStyle").value;
     const result = document.querySelector("[data-resume-results]");
@@ -648,13 +691,25 @@ function renderResumePicker() {
       executive: "Use a leadership summary, signature achievements, and business-level impact language.",
       international: "Use region-friendly formatting, concise role summaries, and optional language or relocation details.",
     };
+    const industryAdvice = {
+      technology: "Show tools, systems, uptime, delivery impact, architecture, and automation proof.",
+      operations: "Show process improvement, coordination, cost control, quality, and execution rhythm.",
+      sales: "Show pipeline movement, revenue influence, conversion, retention, and customer proof.",
+      finance: "Show accuracy, reporting, controls, reconciliation, forecasting, and stakeholder clarity.",
+      creative: "Show campaign outcomes, portfolio proof, content systems, brand consistency, and audience growth.",
+    };
 
     result.innerHTML = `
       <article class="recommendation">
         <span class="category-pill">Best match</span>
         <h3>${escapeHtml(resume.name)}</h3>
         <p><strong>Positioning for ${escapeHtml(role)}:</strong> ${escapeHtml(levelAdvice[level])}</p>
+        <p><strong>Industry angle:</strong> ${escapeHtml(industryAdvice[industry])}</p>
         <p><strong>Format:</strong> ${escapeHtml(styleAdvice[style])}</p>
+        <div class="recommendation-meta">
+          <div><span>Template fit</span><strong>96%</strong></div>
+          <div><span>Add-on fit</span><strong>LinkedIn</strong></div>
+        </div>
         <div class="recommendation-actions">
           <a class="button secondary" href="${productUrl(resume)}">View Details</a>
           <button class="button primary" type="button" data-add-product="${resume.id}">Add Resume Kit</button>
@@ -678,9 +733,14 @@ function renderAdminPage() {
   if (!form) return;
 
   const table = document.querySelector("[data-admin-products]");
+  const countNode = document.querySelector("[data-admin-count]");
+  const customNode = document.querySelector("[data-admin-custom]");
 
   function drawTable() {
-    table.innerHTML = allProducts()
+    const products = allProducts();
+    if (countNode) countNode.textContent = String(products.length);
+    if (customNode) customNode.textContent = String(state.customProducts.length);
+    table.innerHTML = products
       .map(
         (product) => `
           <tr>
@@ -741,6 +801,35 @@ function renderAdminPage() {
   drawTable();
 }
 
+function renderSupportPage() {
+  const form = document.querySelector("[data-support-form]");
+  if (!form) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = document.querySelector("#supportEmail").value.trim();
+    const topic = document.querySelector("#supportTopic").value;
+    const message = document.querySelector("#supportMessage").value.trim();
+    if (!email || !message) return;
+
+    downloadText(
+      "promptlypro-support-request.txt",
+      `PromptlyPro support request
+
+Email: ${email}
+Topic: ${topic}
+
+Message:
+${message}
+
+Production note:
+Connect this form to EMAIL_API_KEY or a ticketing backend before launch.`
+    );
+    form.reset();
+    showToast("Support request prepared.");
+  });
+}
+
 function enhanceMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const progress = document.createElement("div");
@@ -757,11 +846,20 @@ function enhanceMotion() {
       ".product-card",
       ".category-card",
       ".feature-card",
+      ".intelligence-card",
+      ".commerce-status",
+      ".module-intro",
+      ".module-band",
+      ".workflow-panel",
+      ".workflow-steps > div",
+      ".quality-grid > div",
       ".tool-panel",
       ".result-panel",
       ".recommendation",
       ".download-card",
       ".support-card",
+      ".support-form",
+      ".policy-nav",
       ".policy-copy",
       ".table-panel",
       ".cart-item",
@@ -948,6 +1046,7 @@ function init() {
   renderPromptStudio();
   renderResumePicker();
   renderAdminPage();
+  renderSupportPage();
   enhanceMotion();
 }
 

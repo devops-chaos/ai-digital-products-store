@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
 
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
     res.status(200).json({
-      mode: "demo",
+      mode: "local-fallback",
       message: "Stripe keys are blank. Add keys before using webhook fulfillment.",
     });
     return;

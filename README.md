@@ -4,14 +4,14 @@ PromptlyPro is a multi-page AI-powered digital products store for templates, pro
 
 ## Pages
 
-- `index.html` - professional homepage with hero, featured products, category blocks, and store positioning.
+- `index.html` - professional animated homepage with hero, AI commerce panels, featured products, category blocks, and store positioning.
 - `store.html` - searchable catalog with category, audience, budget, and sort filters.
 - `product.html` - product detail page driven by product IDs from the catalog.
-- `ai-finder.html` - local AI-style product recommendation flow with an OpenAI-ready API placeholder.
+- `ai-finder.html` - AI-style product recommendation flow with an OpenAI-ready API endpoint.
 - `prompt-studio.html` - prompt generator for sales, resumes, content, operations, courses, and support.
 - `resume-picker.html` - resume template matcher for target roles and career levels.
-- `cart.html` - cart and demo checkout page.
-- `downloads.html` - unlocked digital downloads page after demo checkout.
+- `cart.html` - cart and checkout page with Stripe-ready serverless endpoint.
+- `downloads.html` - unlocked digital downloads page after checkout.
 - `admin.html` - local product manager and JSON export.
 - `support.html` and `policies.html` - production-supporting store pages.
 
@@ -21,9 +21,9 @@ PromptlyPro is a multi-page AI-powered digital products store for templates, pro
 - Branded PNG hero and product preview assets.
 - Shared product catalog in `assets/catalog.js`.
 - Shared storefront behavior in `assets/site.js`.
-- Cart, demo checkout, and local download unlock flow.
+- Cart, checkout fallback, and local download unlock flow.
 - Admin product creation in browser local storage.
-- OpenAI and Stripe serverless API placeholders.
+- OpenAI and Stripe serverless API integration points.
 - Blank `.env.example` for production keys.
 
 ## Run locally
@@ -54,7 +54,7 @@ EMAIL_API_KEY=
 DATABASE_URL=
 ```
 
-The storefront works without keys in demo mode. OpenAI and Stripe production calls are prepared in the `api/` folder.
+The storefront works without keys in local fallback mode. OpenAI and Stripe production calls are prepared in the `api/` folder.
 
 ## Visual assets
 
@@ -68,7 +68,7 @@ The generated assets live in `assets/img/`.
 
 ## Production checklist
 
-- Replace demo product files with real downloadable assets.
+- Replace sample product files with real downloadable assets.
 - Add real Stripe product or price IDs.
 - Replace local-storage fulfillment with webhook-verified database entitlements.
 - Add customer accounts for repeat download access.

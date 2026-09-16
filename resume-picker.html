@@ -30,21 +30,42 @@
       <section class="page-hero">
         <div class="container">
           <div>
-            <p class="eyebrow">Resume Picker</p>
-            <h1>Choose the Right Resume Angle</h1>
-            <p>Match role, experience level, and style to a practical resume kit and LinkedIn add-on.</p>
+            <p class="eyebrow">Resume intelligence</p>
+            <h1>Match a target role to the right resume and visibility system.</h1>
+            <p>Choose role, seniority, and presentation style to receive a career-product path with practical positioning guidance.</p>
           </div>
           <div class="page-kpis">
             <div><strong>ATS</strong><span>friendly structure</span></div>
-            <div><strong>LinkedIn</strong><span>profile add-on included</span></div>
+            <div><strong>Profile</strong><span>resume plus LinkedIn path</span></div>
           </div>
         </div>
       </section>
 
       <section class="section container">
+        <div class="module-intro">
+          <div>
+            <p class="eyebrow">Career conversion</p>
+            <h2>Sharper Positioning Before the Buyer Opens a Template</h2>
+          </div>
+          <p>Get both the format and the message angle so job seekers can act with more confidence.</p>
+        </div>
         <div class="tool-layout">
           <form class="tool-panel" data-resume-form>
+            <div class="panel-heading">
+              <span>Career profile</span>
+              <strong>Match template</strong>
+            </div>
             <label><span>Target role</span><input id="resumeRole" type="text" placeholder="DevOps Engineer, Project Manager, Sales Rep..." /></label>
+            <label>
+              <span>Industry</span>
+              <select id="resumeIndustry">
+                <option value="technology">Technology</option>
+                <option value="operations">Operations</option>
+                <option value="sales">Sales and marketing</option>
+                <option value="finance">Finance and admin</option>
+                <option value="creative">Creative and content</option>
+              </select>
+            </label>
             <label>
               <span>Experience level</span>
               <select id="resumeLevel">
@@ -66,8 +87,21 @@
             <button class="button primary full" type="submit">Match Template</button>
           </form>
           <div class="result-panel" data-resume-results>
-            <div class="empty-state">Your resume match will appear here.</div>
+            <div class="assistant-empty">
+              <span class="scanner-line"></span>
+              <strong>Career match ready</strong>
+              <p>Your resume angle, template fit, and LinkedIn add-on recommendation will appear here.</p>
+              <div class="mini-node-row"><i></i><i></i><i></i><i></i></div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="quality-grid">
+          <div><strong>ATS Clarity</strong><p>Single-column guidance, keyword focus, and measurable achievements.</p></div>
+          <div><strong>Role Positioning</strong><p>Advice changes by seniority, industry, and target role.</p></div>
+          <div><strong>Visibility Layer</strong><p>LinkedIn prompts extend the resume into outreach and personal brand.</p></div>
         </div>
       </section>
     </main>

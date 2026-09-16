@@ -30,22 +30,58 @@
       <section class="page-hero">
         <div class="container">
           <div>
-            <p class="eyebrow">Support</p>
-            <h1>Help for Digital Product Buyers</h1>
-            <p>Support page structure for downloads, licensing, refunds, technical issues, and product requests.</p>
+            <p class="eyebrow">Customer support</p>
+            <h1>Fast help for downloads, licenses, product access, and purchase questions.</h1>
+            <p>Give buyers a clear support path for order access, file issues, usage rights, refunds, and product requests.</p>
           </div>
           <div class="page-kpis">
             <div><strong>24h</strong><span>target response window</span></div>
-            <div><strong>Digital</strong><span>delivery support</span></div>
+            <div><strong>Vault</strong><span>download and license support</span></div>
           </div>
         </div>
       </section>
 
       <section class="section container">
-        <div class="support-grid">
-          <div class="support-card"><h3>Download Access</h3><p>Customers can access unlocked files from the download vault after checkout.</p></div>
-          <div class="support-card"><h3>License Use</h3><p>Products are designed for personal or internal business use unless a team license is added later.</p></div>
-          <div class="support-card"><h3>Product Requests</h3><p>Future buyers can request templates, prompt packs, or automation kits for their niche.</p></div>
+        <div class="support-layout">
+          <div class="support-grid">
+            <div class="support-card"><span>01</span><h3>Download Access</h3><p>Customers can access unlocked files from the download vault after checkout.</p></div>
+            <div class="support-card"><span>02</span><h3>License Use</h3><p>Products are designed for personal or internal business use unless a team license is added later.</p></div>
+            <div class="support-card"><span>03</span><h3>Product Requests</h3><p>Buyers can request templates, prompt packs, or automation kits for their niche.</p></div>
+          </div>
+          <form class="support-form" data-support-form>
+            <div class="panel-heading">
+              <span>Support request</span>
+              <strong>Contact the store</strong>
+            </div>
+            <label><span>Email</span><input id="supportEmail" type="email" placeholder="you@example.com" required /></label>
+            <label>
+              <span>Topic</span>
+              <select id="supportTopic">
+                <option>Download access</option>
+                <option>License question</option>
+                <option>Refund review</option>
+                <option>Product request</option>
+                <option>Technical issue</option>
+              </select>
+            </label>
+            <label><span>Message</span><textarea id="supportMessage" rows="5" placeholder="Tell us what you need help with." required></textarea></label>
+            <button class="button primary full" type="submit">Prepare Support Request</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="module-band">
+          <div>
+            <p class="eyebrow">Service promise</p>
+            <h2>Clear Answers for Digital Product Customers</h2>
+            <p>Buyers get calm, direct, and reliable guidance from purchase through download access.</p>
+          </div>
+          <div class="module-metrics">
+            <div><strong>Order help</strong><span>Access, receipts, and vault visibility</span></div>
+            <div><strong>Usage help</strong><span>Licensing and implementation notes</span></div>
+            <div><strong>Product help</strong><span>Requests, gaps, and future kits</span></div>
+          </div>
         </div>
       </section>
     </main>

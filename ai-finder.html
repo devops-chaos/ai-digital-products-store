@@ -31,19 +31,30 @@
         <div class="container">
           <div>
             <p class="eyebrow">AI Finder</p>
-            <h1>Match Your Goal to the Right Product Bundle</h1>
-            <p>Describe what you want to achieve and get a focused recommendation from the catalog.</p>
+            <h1>Turn a buyer goal into the right digital product stack.</h1>
+            <p>Describe the outcome, role, and budget. The finder ranks products by fit and suggests the most useful next step.</p>
           </div>
           <div class="page-kpis">
             <div><strong>3 picks</strong><span>ranked by fit</span></div>
-            <div><strong>Goal-aware</strong><span>matching logic</span></div>
+            <div><strong>Intent-first</strong><span>goal-aware recommendations</span></div>
           </div>
         </div>
       </section>
 
       <section class="section container">
+        <div class="module-intro">
+          <div>
+            <p class="eyebrow">Recommendation engine</p>
+            <h2>Personalized Discovery Without Forcing a Chatbot</h2>
+          </div>
+          <p>A calmer discovery path narrows the catalog into a clear product recommendation without overwhelming the buyer.</p>
+        </div>
         <div class="tool-layout">
           <form class="tool-panel" data-finder-form>
+            <div class="panel-heading">
+              <span>Buyer profile</span>
+              <strong>Match settings</strong>
+            </div>
             <label>
               <span>I am a</span>
               <select id="finderRole">
@@ -53,6 +64,15 @@
                 <option value="creators">Creator</option>
                 <option value="students">Student</option>
                 <option value="teams">Team lead</option>
+              </select>
+            </label>
+            <label>
+              <span>Priority</span>
+              <select id="finderPriority">
+                <option value="speed">Save time quickly</option>
+                <option value="revenue">Increase sales or clients</option>
+                <option value="quality">Improve quality and consistency</option>
+                <option value="career">Strengthen career positioning</option>
               </select>
             </label>
             <label>
@@ -70,8 +90,22 @@
             <button class="button primary full" type="submit">Recommend Products</button>
           </form>
           <div class="result-panel" data-finder-results>
-            <div class="empty-state">Your recommended stack will appear here.</div>
+            <div class="assistant-empty">
+              <span class="scanner-line"></span>
+              <strong>Intent engine ready</strong>
+              <p>Your ranked product stack, match scores, and bundle path will appear here.</p>
+              <div class="mini-node-row"><i></i><i></i><i></i><i></i></div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="workflow-steps compact">
+          <div><span>01</span><strong>Profile</strong><p>Role, budget, and priority set the matching context.</p></div>
+          <div><span>02</span><strong>Intent</strong><p>Goal text is compared with tags and outcomes.</p></div>
+          <div><span>03</span><strong>Stack</strong><p>The strongest products are ranked with clear reasons.</p></div>
+          <div><span>04</span><strong>Action</strong><p>The next click leads directly to details or cart.</p></div>
         </div>
       </section>
     </main>

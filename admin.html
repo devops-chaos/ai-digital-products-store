@@ -30,20 +30,29 @@
       <section class="page-hero">
         <div class="container">
           <div>
-            <p class="eyebrow">Admin</p>
-            <h1>Manage Product Data</h1>
-            <p>Add products, inspect catalog data, and export product JSON for the next business workflow.</p>
+            <p class="eyebrow">Store operations</p>
+            <h1>Manage catalog data, product readiness, and export workflows.</h1>
+            <p>Add products locally, inspect catalog health, and export structured JSON when the business workflow is ready.</p>
           </div>
           <div class="page-kpis">
-            <div><strong>Catalog</strong><span>product management</span></div>
-            <div><strong>Export</strong><span>JSON product data</span></div>
+            <div><strong data-admin-count>12</strong><span>catalog products</span></div>
+            <div><strong data-admin-custom>0</strong><span>custom products</span></div>
           </div>
         </div>
       </section>
 
       <section class="section container">
+        <div class="commerce-status admin-status">
+          <div><span>Readiness</span><strong>API configuration separated from the storefront</strong></div>
+          <div><span>Merchandising</span><strong>Categories, ratings, tags, and badges</strong></div>
+          <div><span>Export</span><strong>Product data ready for backend migration</strong></div>
+        </div>
         <div class="tool-layout">
           <form class="tool-panel" data-admin-form>
+            <div class="panel-heading">
+              <span>Catalog entry</span>
+              <strong>Add product</strong>
+            </div>
             <label><span>Product name</span><input id="adminName" type="text" required placeholder="Email Outreach Prompt Kit" /></label>
             <label>
               <span>Category</span>
@@ -66,6 +75,13 @@
             </div>
           </form>
           <div class="table-panel">
+            <div class="table-header">
+              <div>
+                <span>Catalog inventory</span>
+                <strong>Product data</strong>
+              </div>
+              <a class="text-link" href="store.html">View storefront</a>
+            </div>
             <table class="admin-table">
               <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Rating</th></tr></thead>
               <tbody data-admin-products></tbody>

@@ -31,19 +31,30 @@
         <div class="container">
           <div>
             <p class="eyebrow">Prompt Studio</p>
-            <h1>Create Reusable Prompts for Real Work</h1>
-            <p>Generate structured prompts that customers can adapt for selling, writing, hiring, studying, and operations.</p>
+            <h1>Generate polished AI prompts for repeatable business output.</h1>
+            <p>Create structured prompts that customers can reuse for selling, writing, hiring, studying, operations, and customer support.</p>
           </div>
           <div class="page-kpis">
             <div><strong>6 modes</strong><span>sales, resume, content, ops, course, support</span></div>
-            <div><strong>Reusable</strong><span>structured outputs</span></div>
+            <div><strong>Quality rails</strong><span>context, constraints, examples</span></div>
           </div>
         </div>
       </section>
 
       <section class="section container">
+        <div class="module-intro">
+          <div>
+            <p class="eyebrow">Prompt product layer</p>
+            <h2>From Generic Prompt to Packaged Workflow</h2>
+          </div>
+          <p>Turn product ideas into reusable AI instructions with tone, audience, format, and quality checks already built in.</p>
+        </div>
         <div class="tool-layout">
           <form class="tool-panel" data-prompt-form>
+            <div class="panel-heading">
+              <span>Prompt controls</span>
+              <strong>Build output</strong>
+            </div>
             <label>
               <span>Task</span>
               <select id="promptTask">
@@ -56,6 +67,7 @@
               </select>
             </label>
             <label><span>Audience</span><input id="promptAudience" type="text" value="busy small business owners" /></label>
+            <label><span>Context</span><input id="promptContext" type="text" value="a digital product launch or workflow" /></label>
             <label>
               <span>Tone</span>
               <select id="promptTone">
@@ -77,12 +89,26 @@
             <button class="button primary full" type="submit">Generate Prompt</button>
           </form>
           <div class="result-panel">
-            <textarea class="prompt-output" id="promptOutputText" rows="18" readonly></textarea>
+            <div class="output-shell">
+              <div class="output-toolbar">
+                <span>Generated prompt</span>
+                <span>Ready for AI tools</span>
+              </div>
+              <textarea class="prompt-output" id="promptOutputText" rows="18" readonly></textarea>
+            </div>
             <div class="form-actions">
               <button class="button secondary" type="button" data-copy-prompt>Copy Prompt</button>
               <button class="button ghost" type="button" data-download-prompt>Download</button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="section container">
+        <div class="quality-grid">
+          <div><strong>Context</strong><p>Each prompt leaves room for business, role, or brand details.</p></div>
+          <div><strong>Constraints</strong><p>Instructions ask for clarity, examples, and practical sections.</p></div>
+          <div><strong>Reuse</strong><p>Customers can save, download, and adapt the output across workflows.</p></div>
         </div>
       </section>
     </main>

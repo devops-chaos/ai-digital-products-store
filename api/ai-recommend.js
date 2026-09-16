@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
 
   if (!process.env.OPENAI_API_KEY) {
     res.status(200).json({
-      mode: "demo",
+      mode: "local-fallback",
       message: "OPENAI_API_KEY is blank. The frontend local recommender will be used.",
     });
     return;

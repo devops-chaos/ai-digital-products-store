@@ -8,8 +8,8 @@ module.exports = async function handler(req, res) {
 
   if (!process.env.STRIPE_SECRET_KEY) {
     res.status(200).json({
-      mode: "demo",
-      message: "STRIPE_SECRET_KEY is blank. The frontend demo checkout will unlock downloads.",
+      mode: "local-fallback",
+      message: "STRIPE_SECRET_KEY is blank. The frontend checkout fallback will unlock downloads.",
     });
     return;
   }
