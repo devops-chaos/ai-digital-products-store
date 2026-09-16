@@ -160,7 +160,7 @@ function productCard(product, options = {}) {
         <h3><a href="${productUrl(product)}">${escapeHtml(product.name)}</a></h3>
         <p>${escapeHtml(product.summary)}</p>
         <div class="product-signal">
-          <span>AI fit signal</span>
+          <span>AI fit</span>
           <strong>${aiScore}%</strong>
         </div>
         <ul class="feature-list">
