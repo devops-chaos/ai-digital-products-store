@@ -23,12 +23,14 @@ PromptlyPro is a multi-page AI-powered digital products store for templates, pro
 - Shared storefront behavior in `assets/site.js`.
 - Cart, checkout fallback, and local download unlock flow.
 - Admin product creation in browser local storage.
-- OpenAI and Stripe serverless API integration points.
+- OpenAI, Stripe, webhook, health, and support API routes.
+- Local Node server that runs the storefront and APIs together.
 - Blank `.env.example` for production keys.
 
 ## Run locally
 
 ```bash
+npm install
 npm start
 ```
 
@@ -39,6 +41,16 @@ http://localhost:4173
 ```
 
 You can also open `index.html` directly, but the local server is closer to how the site will run after deployment.
+The API-backed AI tools, checkout route, webhook route, and support form require the Node server.
+
+## API routes
+
+- `POST /api/ai-recommend` - recommends catalog products with OpenAI when `OPENAI_API_KEY` is present; otherwise uses a deterministic local matching engine.
+- `POST /api/generate-prompt` - creates a reusable business prompt with OpenAI when configured; otherwise returns a polished local prompt template.
+- `POST /api/create-checkout-session` - creates a Stripe Checkout Session when `STRIPE_SECRET_KEY` is present; otherwise unlocks downloads in local fallback mode for development.
+- `POST /api/stripe-webhook` - verifies Stripe webhook signatures when Stripe keys are configured.
+- `POST /api/support-request` - prepares support tickets and includes a provider integration point for email or helpdesk delivery.
+- `GET /api/health` - reports which integrations are configured.
 
 ## API keys
 
@@ -46,15 +58,17 @@ Copy `.env.example` to `.env` and fill values when you are ready:
 
 ```env
 OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.5
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
-APP_BASE_URL=
+APP_BASE_URL=http://localhost:4173
 EMAIL_API_KEY=
 DATABASE_URL=
+SUPPORT_EMAIL=
 ```
 
-The storefront works without keys in local fallback mode. OpenAI and Stripe production calls are prepared in the `api/` folder.
+The storefront works without keys in local fallback mode. Add the keys above when you are ready for live OpenAI generation, Stripe payments, webhook-verified fulfillment, customer accounts, and support delivery.
 
 ## Visual assets
 
@@ -72,6 +86,6 @@ The generated assets live in `assets/img/`.
 - Add real Stripe product or price IDs.
 - Replace local-storage fulfillment with webhook-verified database entitlements.
 - Add customer accounts for repeat download access.
-- Add email delivery using `EMAIL_API_KEY`.
+- Add email or ticketing delivery using `EMAIL_API_KEY` and `SUPPORT_EMAIL`.
 - Add OpenAI usage limits, logging, and moderation.
 - Review policy text with a qualified professional before launch.

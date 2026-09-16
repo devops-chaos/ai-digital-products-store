@@ -1,4 +1,4 @@
-const OpenAI = require("openai");
+const { buildPrompt } = require("../lib/commerce-ai");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -6,27 +6,43 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const payload = req.body || {};
+  const fallbackPrompt = buildPrompt(payload);
+
   if (!process.env.OPENAI_API_KEY) {
     res.status(200).json({
       mode: "local-fallback",
-      message: "OPENAI_API_KEY is blank. The frontend template generator will be used.",
+      prompt: fallbackPrompt,
     });
     return;
   }
 
-  const { task, audience, tone, output } = req.body || {};
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  try {
+    const OpenAI = require("openai");
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const { task, audience, context, tone, output } = payload;
 
-  const response = await client.responses.create({
-    model: "gpt-5.2",
-    input: `Create a reusable AI prompt for this digital-product customer.
+    const response = await client.responses.create({
+      model: process.env.OPENAI_MODEL || "gpt-5.5",
+      instructions:
+        "Create premium reusable prompts for business buyers. Return only the finished prompt text, with fill-in blanks where useful.",
+      input: `Create a reusable AI prompt for this digital-product customer.
 Task: ${task}
 Audience: ${audience}
+Context: ${context}
 Tone: ${tone}
 Output: ${output}
 
 Return only the prompt text.`,
-  });
+    });
 
-  res.status(200).json({ prompt: response.output_text });
+    res.status(200).json({ mode: "openai", prompt: response.output_text.trim() || fallbackPrompt });
+  } catch (error) {
+    console.error("Prompt generation fallback", error.message);
+    res.status(200).json({
+      mode: "api-fallback",
+      prompt: fallbackPrompt,
+      message: "AI service unavailable. Showing a professional fallback prompt.",
+    });
+  }
 };

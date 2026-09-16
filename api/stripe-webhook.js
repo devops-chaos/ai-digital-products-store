@@ -1,5 +1,3 @@
-const Stripe = require("stripe");
-
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
@@ -14,12 +12,20 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-  const signature = req.headers["stripe-signature"];
+  let stripe;
+  try {
+    const Stripe = require("stripe");
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  } catch (error) {
+    res.status(500).json({ error: "Stripe SDK is not installed." });
+    return;
+  }
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    const signature = req.headers["stripe-signature"];
+    const payload = req.rawBody || req.body;
+    event = stripe.webhooks.constructEvent(payload, signature, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (error) {
     res.status(400).send(`Webhook Error: ${error.message}`);
     return;

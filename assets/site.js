@@ -10,6 +10,17 @@ const state = {
   customProducts: readStorage(STORAGE_KEYS.customProducts, []),
 };
 
+const FINDER_KEYWORD_ALIASES = {
+  automation: ["automation", "automate", "automated", "workflow", "zapier"],
+  leads: ["lead", "leads", "prospect", "prospects"],
+  templates: ["template", "templates"],
+  prompts: ["prompt", "prompts"],
+  clients: ["client", "clients"],
+  sales: ["sale", "sales", "sell", "selling"],
+  resume: ["resume", "cv"],
+  operations: ["operation", "operations", "ops"],
+};
+
 function readStorage(key, fallback) {
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
@@ -50,6 +61,21 @@ function productUrl(product) {
   return `${rootPath()}product.html?id=${encodeURIComponent(product.id)}`;
 }
 
+async function postJson(endpoint, payload) {
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || `Request failed with status ${response.status}`);
+  }
+
+  return data;
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -65,6 +91,11 @@ function slugify(value) {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+}
+
+function finderGoalMatchesTag(tag, goalText, goalWords) {
+  const candidates = FINDER_KEYWORD_ALIASES[tag] || [tag];
+  return candidates.some((candidate) => goalWords.has(candidate) || goalText.includes(candidate));
 }
 
 function setActiveNavigation() {
@@ -426,22 +457,32 @@ async function checkout() {
     return;
   }
 
+  let unlockLocally = false;
+
   try {
     const response = await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items: state.cart }),
     });
+    const data = await response.json().catch(() => ({}));
+
     if (response.ok) {
-      const data = await response.json();
       if (data.url) {
         window.location.href = data.url;
         return;
       }
+
+      if (data.unlockLocally) unlockLocally = true;
+    } else {
+      showToast(data.error || "Checkout service is unavailable.");
+      return;
     }
   } catch {
-    // Static local fallback continues below.
+    unlockLocally = true;
   }
+
+  if (!unlockLocally) return;
 
   const existing = new Map(state.purchases.map((purchase) => [purchase.id, purchase]));
   state.cart.forEach((item) => {
@@ -543,22 +584,17 @@ function renderFinderPage() {
   const form = document.querySelector("[data-finder-form]");
   if (!form) return;
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const role = document.querySelector("#finderRole").value;
-    const goal = document.querySelector("#finderGoal").value.trim();
-    const budget = Number(document.querySelector("#finderBudget").value);
-    const priority = document.querySelector("#finderPriority")?.value || "speed";
-    const result = document.querySelector("[data-finder-results]");
-    const words = new Set(goal.toLowerCase().split(/\W+/).filter(Boolean));
-    const priorityTags = {
-      speed: ["automation", "workflow", "templates", "planner", "prompts"],
-      revenue: ["sales", "clients", "proposal", "launch", "outreach"],
-      quality: ["support", "sop", "brand", "workflow", "operations"],
-      career: ["resume", "linkedin", "career", "interview", "profile"],
-    };
+  const result = document.querySelector("[data-finder-results]");
+  const priorityTags = {
+    speed: ["automation", "workflow", "templates", "planner", "prompts"],
+    revenue: ["sales", "clients", "proposal", "launch", "outreach"],
+    quality: ["support", "sop", "brand", "workflow", "operations"],
+    career: ["resume", "linkedin", "career", "interview", "profile"],
+  };
 
-    const matches = allProducts()
+  function localMatches({ role, goal, budget, priority }) {
+    const words = new Set(goal.toLowerCase().split(/\W+/).filter(Boolean));
+    return allProducts()
       .map((product) => {
         let score = product.featured / 2;
         if (product.audience.includes(role)) score += 34;
@@ -567,36 +603,90 @@ function renderFinderPage() {
           if (product.tags.includes(tag) || product.summary.toLowerCase().includes(tag)) score += 8;
         });
         product.tags.forEach((tag) => {
-          if (words.has(tag) || goal.toLowerCase().includes(tag)) score += 12;
+          if (finderGoalMatchesTag(tag, goal.toLowerCase(), words)) score += 12;
         });
-        return { product, score: Math.min(100, Math.round(score)) };
+        return { product, rawScore: score, score: Math.min(100, Math.round(score)) };
       })
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.rawScore - a.rawScore)
       .slice(0, 3);
+  }
 
-    result.innerHTML = matches
-      .map(
-        ({ product, score }, index) => `
-          <article class="recommendation">
-            <div>
-              <span class="category-pill">Match ${index + 1}</span>
-              <h3>${escapeHtml(product.name)}</h3>
-              <p>${escapeHtml(product.summary)}</p>
-            </div>
-            <div class="recommendation-meta">
-              <div><span>Fit score</span><strong>${score}%</strong></div>
-              <div><span>Best for</span><strong>${escapeHtml(product.audience[0].replace("-", " "))}</strong></div>
-            </div>
-            <div class="score-bar"><span style="width:${score}%"></span></div>
-            <p class="recommendation-note">Recommended because it aligns with your buyer role, budget, and ${escapeHtml(priority.replace("-", " "))} priority.</p>
-            <div class="recommendation-actions">
-              <a class="button secondary" href="${productUrl(product)}">View Details</a>
-              <button class="button primary" type="button" data-add-product="${escapeHtml(product.id)}">Add to Cart</button>
-            </div>
-          </article>
-        `
-      )
-      .join("");
+  function drawMatches(matches, data = {}) {
+    result.innerHTML = `
+      <div class="recommendation-summary">
+        <div>
+          <span class="eyebrow">${data.mode === "openai" ? "AI recommendation" : "Smart recommendation"}</span>
+          <h2>${data.confidence || matches[0]?.score || 92}% confidence match</h2>
+        </div>
+        <p>${escapeHtml(data.bundleStrategy || "Start with the closest-fit product, then add one workflow asset that supports the same outcome.")}</p>
+      </div>
+      ${matches
+        .map(({ product, score }, index) => {
+          const reason =
+            (Array.isArray(data.reasons) && data.reasons[index]) ||
+            `Recommended because it aligns with your buyer role, budget, and selected priority.`;
+
+          return `
+            <article class="recommendation">
+              <div>
+                <span class="category-pill">Match ${index + 1}</span>
+                <h3>${escapeHtml(product.name)}</h3>
+                <p>${escapeHtml(product.summary)}</p>
+              </div>
+              <div class="recommendation-meta">
+                <div><span>Fit score</span><strong>${score}%</strong></div>
+                <div><span>Best for</span><strong>${escapeHtml((product.audience.includes(data.role) ? data.role : product.audience[0]).replace("-", " "))}</strong></div>
+              </div>
+              <div class="score-bar"><span style="width:${score}%"></span></div>
+              <p class="recommendation-note">${escapeHtml(reason)}</p>
+              <div class="recommendation-actions">
+                <a class="button secondary" href="${productUrl(product)}">View Details</a>
+                <button class="button primary" type="button" data-add-product="${escapeHtml(product.id)}">Add to Cart</button>
+              </div>
+            </article>
+          `;
+        })
+        .join("")}
+    `;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const role = document.querySelector("#finderRole").value;
+    const goal = document.querySelector("#finderGoal").value.trim();
+    const budget = Number(document.querySelector("#finderBudget").value);
+    const priority = document.querySelector("#finderPriority")?.value || "speed";
+    const payload = { role, goal, budget, priority, products: allProducts() };
+    const fallbackMatches = localMatches(payload);
+
+    result.innerHTML = `
+      <div class="assistant-empty">
+        <span class="eyebrow">AI finder</span>
+        <h3>Analyzing buyer intent...</h3>
+        <p>Matching your role, budget, goal, and launch priority against the product catalog.</p>
+      </div>
+    `;
+
+    try {
+      const data = await postJson("/api/ai-recommend", payload);
+      const matches = (data.productIds || [])
+        .map((id, index) => {
+          const product = productById(id);
+          if (!product) return null;
+          const localScore = fallbackMatches.find((match) => match.product.id === id)?.score;
+          return { product, score: localScore || Math.max(82, Number(data.confidence || 90) - index * 4) };
+        })
+        .filter(Boolean);
+
+      drawMatches(matches.length ? matches : fallbackMatches, { ...data, role });
+    } catch {
+      drawMatches(fallbackMatches, {
+        mode: "browser-fallback",
+        role,
+        bundleStrategy:
+          "The live API is offline, so the browser matched products by audience, budget, priority, and catalog tags.",
+      });
+    }
   });
 }
 
@@ -606,12 +696,17 @@ function renderPromptStudio() {
 
   const output = document.querySelector("#promptOutputText");
 
-  function buildPrompt() {
+  function promptPayload() {
     const task = document.querySelector("#promptTask").value;
     const audience = document.querySelector("#promptAudience").value.trim() || "my target audience";
     const context = document.querySelector("#promptContext")?.value.trim() || "my current project";
     const tone = document.querySelector("#promptTone").value;
     const format = document.querySelector("#promptFormat").value;
+    return { task, audience, context, tone, output: format };
+  }
+
+  function buildPrompt() {
+    const { task, audience, context, tone, output: format } = promptPayload();
     const taskMap = {
       sales: "write sales outreach that starts a useful conversation",
       resume: "rewrite a resume section so it is specific, credible, and ATS-friendly",
@@ -644,9 +739,18 @@ Instructions:
   }
 
   output.value = buildPrompt();
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    output.value = buildPrompt();
+    output.value = "Generating a production-ready AI prompt...";
+
+    try {
+      const data = await postJson("/api/generate-prompt", promptPayload());
+      output.value = data.prompt || buildPrompt();
+      showToast(data.mode === "openai" ? "AI prompt generated." : "Prompt generated in local mode.");
+    } catch {
+      output.value = buildPrompt();
+      showToast("Prompt generated with browser fallback.");
+    }
   });
 
   document.querySelector("[data-copy-prompt]").addEventListener("click", async () => {
@@ -805,17 +909,10 @@ function renderSupportPage() {
   const form = document.querySelector("[data-support-form]");
   if (!form) return;
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const email = document.querySelector("#supportEmail").value.trim();
-    const topic = document.querySelector("#supportTopic").value;
-    const message = document.querySelector("#supportMessage").value.trim();
-    if (!email || !message) return;
+  function supportText({ email, topic, message, ticketId = "local" }) {
+    return `PromptlyPro support request
 
-    downloadText(
-      "promptlypro-support-request.txt",
-      `PromptlyPro support request
-
+Ticket: ${ticketId}
 Email: ${email}
 Topic: ${topic}
 
@@ -823,10 +920,32 @@ Message:
 ${message}
 
 Production note:
-Connect this form to EMAIL_API_KEY or a ticketing backend before launch.`
-    );
-    form.reset();
-    showToast("Support request prepared.");
+Connect EMAIL_API_KEY, SUPPORT_EMAIL, and a ticketing provider before launch.`;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const email = document.querySelector("#supportEmail").value.trim();
+    const topic = document.querySelector("#supportTopic").value;
+    const message = document.querySelector("#supportMessage").value.trim();
+    if (!email || !message) return;
+
+    const button = form.querySelector("button[type='submit']");
+    button.disabled = true;
+
+    try {
+      const data = await postJson("/api/support-request", { email, topic, message });
+      if (data.mode === "local-fallback") {
+        downloadText(`promptlypro-support-${data.ticketId}.txt`, supportText({ email, topic, message, ticketId: data.ticketId }));
+      }
+      form.reset();
+      showToast(`Support ticket ${data.ticketId || "prepared"}.`);
+    } catch {
+      downloadText("promptlypro-support-request.txt", supportText({ email, topic, message }));
+      showToast("Support request downloaded for local use.");
+    } finally {
+      button.disabled = false;
+    }
   });
 }
 
