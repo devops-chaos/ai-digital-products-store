@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Browse PromptlyPro AI digital products by category, audience, budget, and rating." />
     <title>Store | PromptlyPro</title>
-    <link rel="stylesheet" href="assets/styles.css?v=ai11" />
+    <link rel="stylesheet" href="assets/styles.css?v=ai12" />
   </head>
   <body data-page="store">
     <header class="site-header">
@@ -41,11 +41,27 @@
         </div>
       </section>
 
-      <section class="section container">
-        <div class="commerce-status">
-          <div><span>Personalization</span><strong>Audience-aware filtering</strong></div>
-          <div><span>Discovery</span><strong>Search, filters, and AI Finder</strong></div>
-          <div><span>Delivery</span><strong>Instant digital access after checkout</strong></div>
+      <section class="section container store-section">
+        <div class="store-command">
+          <div class="store-command-copy">
+            <p class="eyebrow">AI catalog command</p>
+            <h2>Guide shoppers from intent to the right product stack.</h2>
+            <p>Browse by product shelf, refine the catalog, or send customers into the AI Finder for a ranked bundle.</p>
+          </div>
+          <div class="store-command-benefits">
+            <div><span>Personalized</span><strong>Audience-aware picks</strong><p>Filters stay focused on the buyer type.</p></div>
+            <div><span>Searchable</span><strong>Fast product discovery</strong><p>Category, budget, and quality signals remain visible.</p></div>
+            <div><span>Instant</span><strong>Digital delivery path</strong><p>Cart, checkout, and download vault stay connected.</p></div>
+          </div>
+          <div class="store-command-categories">
+            <span class="field-label">Browse product shelves</span>
+            <div class="chips" data-category-tabs></div>
+          </div>
+          <a class="store-ai-card" href="ai-finder.html">
+            <span>AI Finder</span>
+            <strong>Find My Best Bundle</strong>
+            <small>3 ranked products with fit scores</small>
+          </a>
         </div>
         <div class="store-layout">
           <aside class="filter-panel" aria-label="Product filters">
@@ -91,9 +107,12 @@
             </div>
           </aside>
           <div class="store-tools">
-            <div class="catalog-toolbar">
-              <div class="chips" data-category-tabs></div>
-              <a class="button secondary" href="ai-finder.html">Use AI Finder</a>
+            <div class="store-results-head">
+              <div>
+                <p class="eyebrow">Live catalog</p>
+                <h2>Production-ready digital products</h2>
+              </div>
+              <p>Curated templates, prompts, systems, and automation kits arranged for quick buying decisions.</p>
             </div>
             <div class="product-grid three" data-product-grid></div>
           </div>
@@ -125,7 +144,7 @@
       </div>
     </footer>
 
-    <script src="assets/catalog.js?v=ai11"></script>
-    <script src="assets/site.js?v=ai11"></script>
+    <script src="assets/catalog.js?v=ai12"></script>
+    <script src="assets/site.js?v=ai12"></script>
   </body>
 </html>
