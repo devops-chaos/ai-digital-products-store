@@ -1,0 +1,15 @@
+{
+  "name": "ai-digital-products-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered digital products marketplace with OpenAI and Stripe API placeholders.",
+  "scripts": {
+    "start": "python -m http.server 4173",
+    "serve": "python -m http.server 4173"
+  },
+  "dependencies": {
+    "openai": "^6.0.0",
+    "stripe": "^18.0.0"
+  },
+  "devDependencies": {}
+}

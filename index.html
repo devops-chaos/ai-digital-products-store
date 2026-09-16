@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="AI-powered digital products marketplace for templates, prompts, business kits, resume packs, Notion systems, Canva designs, mini courses, and automation bundles."
+    />
+    <title>PromptlyPro | AI Digital Products Store</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header" id="top">
+        <a class="brand" href="#top" aria-label="PromptlyPro home">
+          <span class="brand-mark">P</span>
+          <span>
+            <strong>PromptlyPro</strong>
+            <small>AI digital products</small>
+          </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Primary navigation">
+          <a href="#store">Store</a>
+          <a href="#ai-finder">AI Finder</a>
+          <a href="#prompt-studio">Prompt Studio</a>
+          <a href="#resume-picker">Resume Picker</a>
+          <a href="#downloads">Downloads</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="ghost-button" type="button" data-open-admin>Admin</button>
+          <button class="cart-button" type="button" data-open-cart>
+            <span>Cart</span>
+            <strong data-cart-count>0</strong>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Digital tools for faster work</p>
+            <h1 id="hero-title">PromptlyPro</h1>
+            <p class="hero-lede">
+              A focused marketplace for resume kits, prompt packs, business systems, creator templates,
+              mini courses, and automation bundles.
+            </p>
+            <div class="hero-actions">
+              <a class="primary-button" href="#store">Browse Products</a>
+              <a class="secondary-button" href="#ai-finder">Find My Best Product</a>
+            </div>
+          </div>
+
+          <figure class="hero-visual" aria-label="Featured digital product previews">
+            <div class="visual-topbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="visual-grid">
+              <div class="visual-tile tall">
+                <span>Resume</span>
+                <strong>Career Launch</strong>
+                <div class="mini-doc">
+                  <i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+              <div class="visual-tile accent-blue">
+                <span>Prompts</span>
+                <strong>Sales AI</strong>
+                <div class="signal-bars"><i></i><i></i><i></i></div>
+              </div>
+              <div class="visual-tile accent-coral">
+                <span>Canva</span>
+                <strong>Launch Pack</strong>
+                <div class="swatches"><i></i><i></i><i></i></div>
+              </div>
+              <div class="visual-tile accent-green wide">
+                <span>Automation</span>
+                <strong>Small Business Flow</strong>
+                <div class="flow-line"><i></i><i></i><i></i></div>
+              </div>
+            </div>
+          </figure>
+        </section>
+
+        <section class="stats-strip" aria-label="Store highlights">
+          <div>
+            <strong>42</strong>
+            <span>launch-ready files</span>
+          </div>
+          <div>
+            <strong>7</strong>
+            <span>product categories</span>
+          </div>
+          <div>
+            <strong>AI</strong>
+            <span>finder and generators</span>
+          </div>
+          <div>
+            <strong>API</strong>
+            <span>Stripe and OpenAI ready</span>
+          </div>
+        </section>
+
+        <section class="section-block" id="store" aria-labelledby="store-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Marketplace</p>
+              <h2 id="store-title">Digital Products</h2>
+            </div>
+            <p>
+              Curated packs for job seekers, freelancers, creators, students, teams, and small businesses.
+            </p>
+          </div>
+
+          <div class="store-layout">
+            <aside class="filter-panel" aria-label="Product filters">
+              <label>
+                <span>Search</span>
+                <input id="searchInput" type="search" placeholder="Resume, prompts, business..." />
+              </label>
+
+              <label>
+                <span>Category</span>
+                <select id="categoryFilter">
+                  <option value="all">All categories</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Audience</span>
+                <select id="audienceFilter">
+                  <option value="all">Everyone</option>
+                  <option value="job-seekers">Job seekers</option>
+                  <option value="freelancers">Freelancers</option>
+                  <option value="founders">Founders</option>
+                  <option value="creators">Creators</option>
+                  <option value="students">Students</option>
+                  <option value="teams">Teams</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Budget</span>
+                <select id="budgetFilter">
+                  <option value="999">Any price</option>
+                  <option value="25">Under $25</option>
+                  <option value="50">Under $50</option>
+                  <option value="80">Under $80</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Sort</span>
+                <select id="sortFilter">
+                  <option value="featured">Featured</option>
+                  <option value="price-asc">Price: low to high</option>
+                  <option value="price-desc">Price: high to low</option>
+                  <option value="rating">Top rated</option>
+                </select>
+              </label>
+            </aside>
+
+            <div class="products-area">
+              <div class="catalog-tabs" role="tablist" aria-label="Quick category filters">
+                <button class="tab-button active" type="button" data-tab="all">All</button>
+              </div>
+              <div class="product-grid" id="productGrid" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block tool-band" id="ai-finder" aria-labelledby="finder-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">AI Finder</p>
+              <h2 id="finder-title">Product Recommendation</h2>
+            </div>
+            <p>Match a goal with the best product stack in the store.</p>
+          </div>
+
+          <div class="tool-layout two-column">
+            <form class="tool-panel" id="finderForm">
+              <label>
+                <span>I am a</span>
+                <select id="finderRole">
+                  <option value="job-seekers">Job seeker</option>
+                  <option value="freelancers">Freelancer</option>
+                  <option value="founders">Small business owner</option>
+                  <option value="creators">Creator</option>
+                  <option value="students">Student</option>
+                  <option value="teams">Team lead</option>
+                </select>
+              </label>
+
+              <label>
+                <span>My goal</span>
+                <textarea
+                  id="finderGoal"
+                  rows="5"
+                  placeholder="Example: I want to win more clients with better proposals and faster follow-up."
+                ></textarea>
+              </label>
+
+              <label>
+                <span>Budget</span>
+                <select id="finderBudget">
+                  <option value="40">Starter</option>
+                  <option value="70">Growth</option>
+                  <option value="120">Full toolkit</option>
+                </select>
+              </label>
+
+              <button class="primary-button full-width" type="submit">Recommend Products</button>
+            </form>
+
+            <div class="result-panel" id="finderResults">
+              <p class="empty-state">Your recommended stack will appear here.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block" id="prompt-studio" aria-labelledby="prompt-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Prompt Studio</p>
+              <h2 id="prompt-title">Prompt Generator</h2>
+            </div>
+            <p>Create a structured prompt for business, content, hiring, support, or learning tasks.</p>
+          </div>
+
+          <div class="tool-layout">
+            <form class="tool-panel prompt-controls" id="promptForm">
+              <label>
+                <span>Task</span>
+                <select id="promptTask">
+                  <option value="sales">Sales outreach</option>
+                  <option value="resume">Resume rewrite</option>
+                  <option value="content">Content calendar</option>
+                  <option value="operations">Business automation</option>
+                  <option value="course">Mini course outline</option>
+                  <option value="support">Customer support macros</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Audience</span>
+                <input id="promptAudience" type="text" value="busy small business owners" />
+              </label>
+
+              <label>
+                <span>Tone</span>
+                <select id="promptTone">
+                  <option value="clear, confident, and helpful">Clear and confident</option>
+                  <option value="friendly, practical, and concise">Friendly and practical</option>
+                  <option value="premium, sharp, and conversion-focused">Premium and sharp</option>
+                  <option value="warm, detailed, and beginner-friendly">Warm and detailed</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Output</span>
+                <select id="promptOutput">
+                  <option value="a polished ready-to-use draft">Ready-to-use draft</option>
+                  <option value="a checklist with clear next actions">Checklist</option>
+                  <option value="a table with sections, examples, and notes">Table</option>
+                  <option value="three strong variations">Three variations</option>
+                </select>
+              </label>
+
+              <button class="primary-button full-width" type="submit">Generate Prompt</button>
+            </form>
+
+            <div class="result-panel prompt-output">
+              <textarea id="promptOutputText" rows="14" readonly></textarea>
+              <div class="inline-actions">
+                <button class="secondary-button" type="button" data-copy-prompt>Copy</button>
+                <button class="secondary-button" type="button" data-download-prompt>Download</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block tool-band" id="resume-picker" aria-labelledby="resume-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Resume Picker</p>
+              <h2 id="resume-title">Template Matcher</h2>
+            </div>
+            <p>Choose a resume pack and positioning angle for a target role.</p>
+          </div>
+
+          <div class="tool-layout two-column">
+            <form class="tool-panel" id="resumeForm">
+              <label>
+                <span>Target role</span>
+                <input id="resumeRole" type="text" placeholder="DevOps Engineer, Project Manager, Sales Rep..." />
+              </label>
+
+              <label>
+                <span>Experience level</span>
+                <select id="resumeLevel">
+                  <option value="entry">Entry level</option>
+                  <option value="mid">Mid level</option>
+                  <option value="senior">Senior</option>
+                  <option value="career-change">Career change</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Style</span>
+                <select id="resumeStyle">
+                  <option value="ats">ATS friendly</option>
+                  <option value="modern">Modern portfolio</option>
+                  <option value="executive">Executive</option>
+                  <option value="international">International</option>
+                </select>
+              </label>
+
+              <button class="primary-button full-width" type="submit">Match Template</button>
+            </form>
+
+            <div class="result-panel" id="resumeResults">
+              <p class="empty-state">Your resume match will appear here.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block" id="downloads" aria-labelledby="downloads-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Vault</p>
+              <h2 id="downloads-title">Downloads</h2>
+            </div>
+            <p>Completed demo orders unlock instant product files in this browser.</p>
+          </div>
+
+          <div class="download-grid" id="downloadGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <p class="eyebrow">Checkout</p>
+          <h2>Your Cart</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-cart aria-label="Close cart">X</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-summary">
+        <div>
+          <span>Subtotal</span>
+          <strong data-cart-total>$0</strong>
+        </div>
+        <button class="primary-button full-width" type="button" data-checkout>Checkout</button>
+        <p>Stripe checkout is ready in the API folder. Demo checkout works until keys are added.</p>
+      </div>
+    </aside>
+
+    <section class="admin-modal" id="adminModal" aria-hidden="true" aria-labelledby="admin-title">
+      <div class="modal-panel">
+        <div class="drawer-header">
+          <div>
+            <p class="eyebrow">Admin</p>
+            <h2 id="admin-title">Product Manager</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-admin aria-label="Close admin">X</button>
+        </div>
+
+        <form class="admin-form" id="adminForm">
+          <label>
+            <span>Product name</span>
+            <input id="adminName" type="text" required placeholder="Example: Email Outreach Prompt Kit" />
+          </label>
+          <label>
+            <span>Category</span>
+            <select id="adminCategory">
+              <option>Prompt Packs</option>
+              <option>Business Kits</option>
+              <option>Resume Packs</option>
+              <option>Notion Systems</option>
+              <option>Canva Templates</option>
+              <option>Mini Courses</option>
+              <option>Automation Bundles</option>
+            </select>
+          </label>
+          <label>
+            <span>Price</span>
+            <input id="adminPrice" type="number" min="1" value="29" required />
+          </label>
+          <label>
+            <span>Short description</span>
+            <textarea id="adminSummary" rows="4" required></textarea>
+          </label>
+          <button class="primary-button full-width" type="submit">Add Product</button>
+        </form>
+
+        <div class="admin-actions">
+          <button class="secondary-button" type="button" data-export-products>Export Product JSON</button>
+          <button class="danger-button" type="button" data-clear-custom>Clear Custom Products</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="overlay" id="overlay" hidden></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
