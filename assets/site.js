@@ -397,7 +397,7 @@ function renderCartPage() {
         <div><span>Delivery</span><strong>Instant</strong></div>
         <div><span>Tax</span><strong>Calculated by Stripe</strong></div>
         <button class="button primary full" type="button" data-checkout>Complete Checkout</button>
-        <p>Works in demo mode now. When Stripe keys are added, this button can redirect to Stripe Checkout.</p>
+        <p>Your products unlock instantly after checkout. Payment processing can connect to Stripe when production keys are added.</p>
       </aside>
     </div>
   `;
@@ -435,7 +435,7 @@ async function checkout() {
   writeStorage(STORAGE_KEYS.purchases, state.purchases);
   writeStorage(STORAGE_KEYS.cart, state.cart);
   renderCartCount();
-  showToast("Demo checkout complete. Downloads unlocked.");
+  showToast("Checkout complete. Downloads unlocked.");
   window.setTimeout(() => {
     window.location.href = `${rootPath()}downloads.html`;
   }, 700);
@@ -453,7 +453,7 @@ function renderDownloadsPage() {
     target.innerHTML = `
       <div class="empty-panel">
         <h2>No downloads yet</h2>
-        <p>Complete a demo checkout and your product files will appear here.</p>
+        <p>Complete checkout and your product files will appear here.</p>
         <a class="button primary" href="${rootPath()}store.html">Shop Products</a>
       </div>
       <div class="product-grid four">${suggestions.map((product) => productCard(product, { compact: true })).join("")}</div>
@@ -741,6 +741,180 @@ function renderAdminPage() {
   drawTable();
 }
 
+function enhanceMotion() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const progress = document.createElement("div");
+  progress.className = "scroll-progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.prepend(progress);
+
+  const revealTargets = document.querySelectorAll(
+    [
+      ".hero-copy",
+      ".hero-showcase",
+      ".page-hero",
+      ".section-heading",
+      ".product-card",
+      ".category-card",
+      ".feature-card",
+      ".tool-panel",
+      ".result-panel",
+      ".recommendation",
+      ".download-card",
+      ".support-card",
+      ".policy-copy",
+      ".table-panel",
+      ".cart-item",
+      ".checkout-summary",
+      ".empty-panel",
+    ].join(",")
+  );
+
+  revealTargets.forEach((element, index) => {
+    element.classList.add("reveal");
+    element.style.setProperty("--reveal-delay", `${Math.min((index % 8) * 45, 280)}ms`);
+  });
+
+  if (reduceMotion) {
+    revealTargets.forEach((element) => element.classList.add("is-visible"));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    revealTargets.forEach((element) => observer.observe(element));
+  }
+
+  const header = document.querySelector(".site-header");
+  const syncScroll = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progressValue = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+    header?.classList.toggle("is-scrolled", window.scrollY > 12);
+    progress.style.transform = `scaleX(${progressValue})`;
+  };
+  syncScroll();
+  window.addEventListener("scroll", syncScroll, { passive: true });
+
+  renderAiHeroCanvas(reduceMotion);
+}
+
+function renderAiHeroCanvas(reduceMotion) {
+  const canvas = document.querySelector("#aiHeroCanvas");
+  if (!canvas) return;
+
+  const context = canvas.getContext("2d");
+  const stage = canvas.closest(".hero-showcase");
+  const colors = {
+    grid: "rgba(255,255,255,0.065)",
+    line: "rgba(113, 214, 188, 0.42)",
+    lineWarm: "rgba(255, 183, 86, 0.26)",
+    point: "rgba(255,255,255,0.78)",
+    glow: "rgba(70, 190, 160, 0.18)",
+  };
+
+  let width = 0;
+  let height = 0;
+  let nodes = [];
+
+  function resize() {
+    const rect = stage.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = Math.max(1, Math.floor(rect.width));
+    height = Math.max(1, Math.floor(rect.height));
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    nodes = Array.from({ length: Math.max(26, Math.floor(width / 16)) }, (_, index) => ({
+      x: ((index * 91) % width) + 12,
+      y: ((index * 57) % height) + 12,
+      vx: (index % 2 ? 0.18 : -0.16) * (0.7 + (index % 5) / 8),
+      vy: (index % 3 ? -0.13 : 0.17) * (0.7 + (index % 7) / 9),
+      r: 1.4 + (index % 4) * 0.45,
+    }));
+  }
+
+  function draw(time = 0) {
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = "#111614";
+    context.fillRect(0, 0, width, height);
+
+    context.strokeStyle = colors.grid;
+    context.lineWidth = 1;
+    for (let x = 0; x < width; x += 42) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, height);
+      context.stroke();
+    }
+    for (let y = 0; y < height; y += 42) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(width, y);
+      context.stroke();
+    }
+
+    nodes.forEach((node) => {
+      if (!reduceMotion) {
+        node.x += node.vx;
+        node.y += node.vy;
+        if (node.x < -20) node.x = width + 20;
+        if (node.x > width + 20) node.x = -20;
+        if (node.y < -20) node.y = height + 20;
+        if (node.y > height + 20) node.y = -20;
+      }
+    });
+
+    for (let i = 0; i < nodes.length; i += 1) {
+      for (let j = i + 1; j < nodes.length; j += 1) {
+        const a = nodes[i];
+        const b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < 142) {
+          context.strokeStyle = i % 4 === 0 ? colors.lineWarm : colors.line;
+          context.globalAlpha = (142 - distance) / 142;
+          context.beginPath();
+          context.moveTo(a.x, a.y);
+          context.lineTo(b.x, b.y);
+          context.stroke();
+        }
+      }
+    }
+
+    context.globalAlpha = 1;
+    nodes.forEach((node, index) => {
+      const pulse = reduceMotion ? 0 : Math.sin(time / 650 + index) * 0.55;
+      context.beginPath();
+      context.fillStyle = colors.glow;
+      context.arc(node.x, node.y, node.r * 5 + pulse, 0, Math.PI * 2);
+      context.fill();
+      context.beginPath();
+      context.fillStyle = colors.point;
+      context.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+      context.fill();
+    });
+
+    if (!reduceMotion) requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+  window.addEventListener("resize", () => {
+    resize();
+    draw();
+  });
+}
+
 function bindGlobalClicks() {
   document.addEventListener("click", (event) => {
     const addButton = event.target.closest("[data-add-product]");
@@ -774,6 +948,7 @@ function init() {
   renderPromptStudio();
   renderResumePicker();
   renderAdminPage();
+  enhanceMotion();
 }
 
 init();

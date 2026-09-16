@@ -62,11 +62,16 @@ def product_image(filename, title, label, palette, motif):
     draw.text((132 * scale, 124 * scale), "PromptlyPro", fill=ink, font=font(27 * scale, True))
     draw.text((880 * scale, 124 * scale), label.upper(), fill=primary, font=font(22 * scale, True))
 
-    draw.text((132 * scale, 230 * scale), title, fill=ink, font=font(58 * scale, True))
-    y = 312 * scale
-    for line_text in wrap(draw, "AI-ready digital product pack for faster, cleaner, more profitable work.", 560 * scale, font(30 * scale)):
-        draw.text((132 * scale, y), line_text, fill=muted, font=font(30 * scale))
-        y += 42 * scale
+    y = 224 * scale
+    title_font = font(43 * scale)
+    for line_text in wrap(draw, title, 510 * scale, title_font):
+        draw.text((132 * scale, y), line_text, fill=ink, font=title_font)
+        y += 54 * scale
+    y += 8 * scale
+    body_font = font(26 * scale)
+    for line_text in wrap(draw, "Smart digital product pack for faster, cleaner, more profitable work.", 550 * scale, body_font):
+        draw.text((132 * scale, y), line_text, fill=muted, font=body_font)
+        y += 37 * scale
 
     if motif == "resume":
         for offset, color in [(0, white), (32, palette["soft"]), (64, white)]:
