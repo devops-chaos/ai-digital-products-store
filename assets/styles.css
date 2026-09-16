@@ -2390,6 +2390,75 @@ textarea:focus {
   color: #fff;
 }
 
+.catalog-toolbar {
+  align-items: flex-start;
+}
+
+.catalog-toolbar .chips {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.catalog-toolbar .button {
+  flex: 0 0 auto;
+  min-width: 156px;
+  min-height: 52px;
+  border-radius: 10px;
+  padding: 0 22px;
+  white-space: nowrap;
+}
+
+.product-media {
+  min-height: 158px;
+}
+
+.product-media img {
+  min-height: 158px;
+}
+
+.badge {
+  z-index: 4;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  max-width: calc(100% - 28px);
+  min-height: 36px;
+  border: 1px solid rgba(var(--card-rgb), 0.34);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(var(--card-rgb), 0.12)),
+    #fff;
+  box-shadow: 0 12px 30px rgba(var(--card-rgb), 0.2);
+  color: #111827;
+  font-size: 0.82rem;
+  font-weight: 560;
+  line-height: 1;
+  padding: 0 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: "";
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--card-accent);
+  box-shadow: 0 0 0 4px rgba(var(--card-rgb), 0.12);
+}
+
+.product-footer .button {
+  min-width: 118px;
+  min-height: 40px;
+  padding-inline: 14px;
+  white-space: nowrap;
+}
+
 @keyframes floatPanel {
   0%,
   100% {
@@ -2549,6 +2618,15 @@ textarea:focus {
   .section-heading {
     align-items: start;
     flex-direction: column;
+  }
+
+  .catalog-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalog-toolbar .button {
+    width: 100%;
   }
 
   .trust-row,
