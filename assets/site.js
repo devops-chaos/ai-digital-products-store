@@ -181,12 +181,14 @@ function productCard(product, options = {}) {
     <article class="product-card">
       <a class="product-media" href="${productUrl(product)}" aria-label="View ${escapeHtml(product.name)}">
         <img src="${imagePath(product)}" alt="${escapeHtml(product.name)} product preview" loading="lazy" />
-        <span class="badge">${escapeHtml(product.badge)}</span>
       </a>
       <div class="product-content">
         <div class="meta-row">
           <span class="category-pill">${escapeHtml(product.category)}</span>
           <span class="rating">${product.rating.toFixed(1)}/5</span>
+        </div>
+        <div class="product-badge-row">
+          <span class="badge">${escapeHtml(product.badge)}</span>
         </div>
         <h3><a href="${productUrl(product)}">${escapeHtml(product.name)}</a></h3>
         <p>${escapeHtml(product.summary)}</p>

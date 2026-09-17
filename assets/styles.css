@@ -774,23 +774,35 @@ p {
 }
 
 .badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 30px;
   border: 1px solid rgba(221, 229, 226, 0.78);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
   color: var(--ink);
   font-size: 0.75rem;
   font-weight: 540;
-  padding: 7px 10px;
+  line-height: 1;
+  padding: 0 10px;
   backdrop-filter: blur(10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .product-content {
   display: grid;
   gap: 8px;
   padding: 12px;
+}
+
+.product-badge-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .product-content h3 {
@@ -2707,11 +2719,9 @@ body[data-page="store"] .filter-panel {
 }
 
 .badge {
-  z-index: 4;
-  top: 14px;
-  left: 14px;
   display: inline-flex;
   align-items: center;
+  width: fit-content;
   max-width: calc(100% - 28px);
   min-height: 36px;
   border: 1px solid rgba(var(--card-rgb), 0.34);
