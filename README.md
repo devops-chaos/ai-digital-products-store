@@ -27,7 +27,7 @@ PromptlyPro is a multi-page AI-powered digital products store for templates, pro
 - Local Node server that runs the storefront and APIs together.
 - Blank `.env.example` for production keys.
 
-## Run locally
+## Run on locally
 
 ```bash
 npm install
