@@ -15,7 +15,7 @@ PromptlyPro is a multi-page AI-powered digital products store for templates, pro
 - `admin.html` - local product manager and JSON export.
 - `support.html` and `policies.html` - production-supporting store pages.
 
-## What is included
+## What is includeded
 
 - Multi-page static storefront, not a single-page app.
 - Branded PNG hero and product preview assets.
