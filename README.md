@@ -2,7 +2,7 @@
 
 PromptlyPro is a multi-page AI-powered digital products store for templates, prompt packs, business kits, resume assets, Notion systems, Canva designs, mini courses, and automation bundles.
 
-## Pages
+## All Pages
 
 - `index.html` - professional animated homepage with hero, AI commerce panels, featured products, category blocks, and store positioning.
 - `store.html` - searchable catalog with category, audience, budget, and sort filters.
